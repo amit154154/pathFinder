@@ -13,7 +13,6 @@ columns = 10
 col_size = 25
 Start_cell = False
 End_cell = False
-
 width = rows*col_size
 height = columns*col_size
 widget = None
@@ -86,7 +85,6 @@ def pixels_to_indexs(pos):
 class TouchInput(Widget):
     def __init__(self, **kwargs):
         super(TouchInput, self).__init__(**kwargs)
-
 
     def on_touch_down(self,touch):
         global touch_mode, Start_cell,End_cell,cols
@@ -220,11 +218,8 @@ class Node():
 
 #astar algoritam
 def astar(maze, start, end):
-    print(maze)
     # Create start and end node
     start_node = Node(None, start)
-    print(start)
-    print(end)
     start_node.g = start_node.h = start_node.f = 0
     end_node = Node(None, end)
     end_node.g = end_node.h = end_node.f = 0
@@ -259,7 +254,6 @@ def astar(maze, start, end):
                 path.append(current.position)
                 current = current.parent
             return path[::-1] # Return reversed path
-
         # Generate children
         children = []
         for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]: # Adjacent squares
