@@ -2,12 +2,16 @@
 from PIL import Image
 import glob
 import os
+import numpy as np
 
-maze_name = 'maze2.png'
+
+maze_name = 'maze3.png'
 dir_mazes = '/Users/amit/Documents/python/pathFinder/mazes/'
-start_color = (205, 220, 57, 255) #rgb start pixel color
-end_color = (229, 57, 53, 255) #rgb end pixel color
+dir_solve_mazes = '/Users/amit/Documents/python/pathFinder/solves_mazes/'
+start_color = (211, 47, 47, 255) #rgb start pixel color
+end_color = (255, 235, 59, 255) #rgb end pixel color
 wall_color = (121, 85, 72, 255)#rgb wall pixel color
+solve_color = (30,255,255,255)#rgb solve way pixel color
 
 def Creat_Maze(maze_image):
     maze = []
@@ -16,7 +20,7 @@ def Creat_Maze(maze_image):
     for i in range(width):
         maze.append([])
         for j in range(height):
-            print(pixels[i,j])
+            print([pixels[i,j]])
             if pixels[i,j] == start_color:
                 start_pixel = (i,j)
             elif pixels[i,j] == end_color:
@@ -124,6 +128,31 @@ def astar(maze, start, end):
             # Add the child to the open list
             open_list.append(child)
 
+def Creat_Solve(maze,start,end,solve,imageName):
+    for pos in solve:
+        maze[pos[0]][pos[1]] = 4
+    maze[start[0]][start[1]] = 2
+    maze[end[0]][end[1]] = 3
+
+    for row in range(len(maze)):
+        for pos in range(len(maze[0])):
+            if maze[row][pos] == 2:
+                maze[row][pos] = start_color
+            elif maze[row][pos] == 3:
+                maze[row][pos] = end_color
+            elif maze[row][pos] == 4:
+                maze[row][pos] = solve_color
+            elif maze[row][pos] == 1:
+                maze[row][pos] = wall_color
+            else:
+                maze[row][pos] = (255,255,255,255)
+
+    array = np.array(maze, dtype=np.uint8)
+    new_image = Image.fromarray(array)
+    print(dir_solve_mazes + 'solve' + imageName[-1])
+    new_image.save(dir_solve_mazes + imageName)
+
+
 maze_image = get_mazeJPG(maze_name)
 maze , start_pixel, end_pixel = Creat_Maze(maze_image)
-print(astar(maze,start_pixel,end_pixel))
+Creat_Solve(maze , start_pixel, end_pixel,astar(maze , start_pixel, end_pixel),'solve3.png')
