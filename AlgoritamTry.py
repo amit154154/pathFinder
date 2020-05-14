@@ -1,8 +1,36 @@
-import queue
-rows = 5
-columns = 5
-cols = []
+#take an image and creat new image with solved maze
+from PIL import Image
+import glob
+import os
 
+maze_name = 'maze2.png'
+dir_mazes = '/Users/amit/Documents/python/pathFinder/mazes/'
+start_color = (205, 220, 57, 255) #rgb start pixel color
+end_color = (229, 57, 53, 255) #rgb end pixel color
+wall_color = (121, 85, 72, 255)#rgb wall pixel color
+
+def Creat_Maze(maze_image):
+    maze = []
+    width, height = maze_image.size
+    pixels = maze_image.load()
+    for i in range(width):
+        maze.append([])
+        for j in range(height):
+            print(pixels[i,j])
+            if pixels[i,j] == start_color:
+                start_pixel = (i,j)
+            elif pixels[i,j] == end_color:
+                end_pixel = (i,j)
+            if pixels[i,j] == wall_color:
+                maze[i].append(1)
+            else:
+                maze[i].append(0)
+    return maze,start_pixel,end_pixel
+
+def get_mazeJPG(maze_name):
+        return Image.open(dir_mazes + maze_name)
+
+#Node Class For each pixel
 class Node():
 
     def __init__(self, parent=None, position=None):
@@ -18,7 +46,6 @@ class Node():
 
 
 def astar(maze, start, end):
-
     # Create start and end node
     start_node = Node(None, start)
     start_node.g = start_node.h = start_node.f = 0
@@ -55,7 +82,6 @@ def astar(maze, start, end):
                 path.append(current.position)
                 current = current.parent
             return path[::-1] # Return reversed path
-
         # Generate children
         children = []
         for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]: # Adjacent squares
@@ -98,18 +124,6 @@ def astar(maze, start, end):
             # Add the child to the open list
             open_list.append(child)
 
-
-def main():
-
-    maze = [[0, 0, 0], [0, 0, 0], [0, 1, 0], [0, 0, 1], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
-
-
-    start = [3, 1]
-    end = [8, 1]
-
-    path = astar(maze, start, end)
-    print(path)
-
-
-if __name__ == '__main__':
-    main()
+maze_image = get_mazeJPG(maze_name)
+maze , start_pixel, end_pixel = Creat_Maze(maze_image)
+print(astar(maze,start_pixel,end_pixel))

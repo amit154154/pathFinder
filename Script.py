@@ -8,8 +8,8 @@ from kivy.uix.button import Button
 
 
 cols = []
-rows = 10
-columns = 10
+rows = 3
+columns = 3
 col_size = 25
 Start_cell = False
 End_cell = False
@@ -219,6 +219,9 @@ class Node():
 #astar algoritam
 def astar(maze, start, end):
     # Create start and end node
+    print(maze)
+    print(start)
+    print(end)
     start_node = Node(None, start)
     start_node.g = start_node.h = start_node.f = 0
     end_node = Node(None, end)
@@ -319,6 +322,5 @@ def draw_Way(moves,color):
 
 
 if __name__ == '__main__':
-   app().run()
-
+  app().run()
 
