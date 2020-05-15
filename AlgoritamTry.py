@@ -3,6 +3,7 @@ from PIL import Image
 import glob
 import os
 import numpy as np
+import tqdm
 
 
 maze_name = 'maze3.png'
@@ -20,7 +21,6 @@ def Creat_Maze(maze_image):
     for i in range(width):
         maze.append([])
         for j in range(height):
-            print([pixels[i,j]])
             if pixels[i,j] == start_color:
                 start_pixel = (i,j)
             elif pixels[i,j] == end_color:
@@ -149,10 +149,18 @@ def Creat_Solve(maze,start,end,solve,imageName):
 
     array = np.array(maze, dtype=np.uint8)
     new_image = Image.fromarray(array)
-    print(dir_solve_mazes + 'solve' + imageName[-1])
     new_image.save(dir_solve_mazes + imageName)
+
+def Solves_All():
+   mazes_path = glob.glob(dir_mazes + '*.png')
+   for maze_path in tqdm.tqdm(mazes_path):
+       solve_name = maze_path.split('/')[-1].split('.')[0] + '_solve.png'
+       maze_image = Image.open(mazes_path)
+       maze, start_pixel, end_pixel = Creat_Maze(maze_image)
+       Creat_Solve(maze, start_pixel, end_pixel, astar(maze, start_pixel, end_pixel), solve_name)
 
 
 maze_image = get_mazeJPG(maze_name)
 maze , start_pixel, end_pixel = Creat_Maze(maze_image)
 Creat_Solve(maze , start_pixel, end_pixel,astar(maze , start_pixel, end_pixel),'solve3.png')
+Solves_All()

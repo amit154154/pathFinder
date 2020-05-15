@@ -8,9 +8,9 @@ from kivy.uix.button import Button
 
 
 cols = []
-rows = 3
-columns = 3
-col_size = 25
+rows = 10
+columns = 10
+col_size = 15
 Start_cell = False
 End_cell = False
 width = rows*col_size
